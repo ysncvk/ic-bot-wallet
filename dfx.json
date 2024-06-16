@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "icp-wallet-bot-backend": {
+      "main": "src/icp-wallet-bot-backend/main.mo",
+      "type": "motoko"
+    },
+    "icp-wallet-bot-frontend": {
+      "dependencies": [
+        "icp-wallet-bot-backend"
+      ],
+      "source": [
+        "src/icp-wallet-bot-frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "icp-wallet-bot-frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

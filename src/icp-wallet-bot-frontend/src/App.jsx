@@ -1,31 +1,30 @@
-import { useState } from 'react';
-import { icp_wallet_bot_backend } from 'declarations/icp-wallet-bot-backend';
+import React, { useEffect } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import WebApp from "@twa-dev/sdk";
+import AppContent from "./AppContent";
+import { AuthProvider } from "./components/AuthContext";
+import { WalletProvider } from "./components/WalletContext";
+import { SnackbarProvider } from "./components/snackbar";
+import ThemeProvider from "./components/ThemeProvider.jsx";
 
-function App() {
-  const [greeting, setGreeting] = useState('');
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.elements.name.value;
-    icp_wallet_bot_backend.greet(name).then((greeting) => {
-      setGreeting(greeting);
-    });
-    return false;
-  }
+const App = () => {
+  useEffect(() => {
+    WebApp.ready();
+  }, []);
 
   return (
-    <main>
-      <img src="/logo2.svg" alt="DFINITY logo" />
-      <br />
-      <br />
-      <form action="#" onSubmit={handleSubmit}>
-        <label htmlFor="name">Enter your name: &nbsp;</label>
-        <input id="name" alt="Name" type="text" />
-        <button type="submit">Click Me!</button>
-      </form>
-      <section id="greeting">{greeting}</section>
-    </main>
+    <AuthProvider>
+      <WalletProvider>
+        <SnackbarProvider>
+          <ThemeProvider>
+            <Router>
+              <AppContent />
+            </Router>
+          </ThemeProvider>
+        </SnackbarProvider>
+      </WalletProvider>
+    </AuthProvider>
   );
-}
+};
 
 export default App;

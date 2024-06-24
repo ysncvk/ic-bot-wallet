@@ -14,14 +14,14 @@ export const AuthProvider = ({ children }) => {
     const telegramUser = window.Telegram.WebApp.initDataUnsafe.user;
     setTelegramId(telegramUser.id);
     setUserName(telegramUser.first_name);
-  }, []);
+  }, [isUser]);
 
   useEffect(() => {
     if (telegramId !== null) {
       checkUser(telegramId);
       console.log(telegramId);
     }
-  }, [telegramId]);
+  }, [telegramId, isUser]);
 
   const checkUser = async () => {
     try {
@@ -36,7 +36,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isUser, loading, telegramId, userName }}>
+    <AuthContext.Provider
+      value={{ isUser, loading, telegramId, userName, setIsUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

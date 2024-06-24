@@ -108,7 +108,7 @@ const Wallet = () => {
           >
             {showPrivateKey
               ? wallet[0].privateKey
-              : "**************************"}
+              : "***********************************************"}
           </Typography>
           <IconButton onClick={() => setShowPrivateKey(!showPrivateKey)}>
             {showPrivateKey ? (

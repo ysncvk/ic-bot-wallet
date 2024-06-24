@@ -31,7 +31,7 @@ const Home = () => {
     <Container>
       <Box>
         <IconButton onClick={() => navigate("/wallet")}>
-          <Icon icon="mdi:wallet" width={40} height={40} />
+          <Icon icon="mdi:wallet" width={40} height={40} color="#05A8DD" />
         </IconButton>
       </Box>
       <RotatingImage />

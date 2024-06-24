@@ -13,17 +13,11 @@ const App = () => {
   }, []);
 
   return (
-    <AuthProvider>
-      <WalletProvider>
-        <SnackbarProvider>
-          <ThemeProvider>
-            <Router>
-              <AppContent />
-            </Router>
-          </ThemeProvider>
-        </SnackbarProvider>
-      </WalletProvider>
-    </AuthProvider>
+    <Router>
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
+    </Router>
   );
 };
 

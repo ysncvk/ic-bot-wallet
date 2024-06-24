@@ -45,13 +45,20 @@ const Receive = () => {
         You can copy and share your wallet address by clicking on the address.
         You can also share your wallet QRCode.
       </Alert>
-      <Box border="solid" padding={1} textAlign="center" marginTop={1}>
-        <QRCode
-          value={wallet[0].accountId}
-          level="M"
-          size={200}
-          fgColor="#05A8DD"
-        />
+      <Box width={1} textAlign="center" paddingTop={2}>
+        <Box
+          border="solid"
+          padding={1}
+          textAlign="center"
+          display="inline-block"
+        >
+          <QRCode
+            value={wallet[0].accountId}
+            level="M"
+            size={200}
+            fgColor="#05A8DD"
+          />
+        </Box>
       </Box>
       <Typography variant="body1" marginTop={3}>
         Account:{" "}

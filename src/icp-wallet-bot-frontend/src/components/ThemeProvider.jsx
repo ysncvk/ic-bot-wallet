@@ -19,8 +19,7 @@ const ThemeToggleContext = createContext();
 export const useThemeToggle = () => useContext(ThemeToggleContext);
 
 const ThemeProvider = ({ children }) => {
-  const telegramTheme = "dark";
-  // const telegramTheme = useTelegramTheme();
+  const telegramTheme = useTelegramTheme();
   const [isDarkMode, setIsDarkMode] = useState(telegramTheme === "dark");
 
   useEffect(() => {

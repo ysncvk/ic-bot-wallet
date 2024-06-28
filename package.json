@@ -18,6 +18,7 @@
   "dependencies": {
     "@dfinity/identity": "^1.4.0",
     "@dfinity/ledger-icp": "^2.3.1",
+    "@dfinity/utils": "^2.3.1",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/material": "^5.15.20",

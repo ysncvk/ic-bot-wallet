@@ -11,12 +11,12 @@ if (!window.Buffer) {
   window.Buffer = Buffer;
 }
 
-const localLedgerCanisterId = "ryjl3-tyaaa-aaaaa-aaaba-cai";
+const LedgerCanisterId = "ryjl3-tyaaa-aaaaa-aaaba-cai";
 
 export const WalletProvider = ({ children }) => {
   const { isUser, telegramId } = useAuth();
   const [wallet, setWallet] = useState(null);
-  const [balance, setBalance] = useState(1);
+  const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
   console.log("wallet providera girdi");
   console.log("ısuser wallwt pro", isUser);
@@ -32,16 +32,15 @@ export const WalletProvider = ({ children }) => {
             setWallet(userData);
 
             console.log("userdata:", userData);
-            /** 
+
             // Ledger canister ile bakiyeyi çek
             const agent = new HttpAgent({
-              host: "http://127.0.0.1:4943",
+              host: "https://ic0.app",
             });
-            // Sertifika doğrulamasını devre dışı bırak
-            await agent.fetchRootKey();
+
             const ledger = LedgerCanister.create({
               agent,
-              canisterId: localLedgerCanisterId,
+              canisterId: LedgerCanisterId,
             });
 
             // Kullanıcının account ID'sini al ve Buffer kullanarak dönüştür
@@ -51,13 +50,14 @@ export const WalletProvider = ({ children }) => {
             const balanceResult = await ledger.accountBalance({
               accountIdentifier: accountIdBuffer,
             });
+            console.log(balanceResult);
 
             if (Number(balanceResult) === null) {
               setBalance(0);
             } else {
               const balanceICP = Number(balanceResult) / 100_000_000; // e8s formatından ICP'ye çevirme
               setBalance(balanceICP);
-            }  */
+            }
           }
         }
       } catch (error) {

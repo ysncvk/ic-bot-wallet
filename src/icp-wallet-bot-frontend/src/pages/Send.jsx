@@ -55,7 +55,7 @@ const Send = () => {
       const identity = Ed25519KeyIdentity.fromSecretKey(privateKeyUint8Array);
 
       const agent = new HttpAgent({
-        host: "https://ic0.app",
+        host: "https://icp-api.io",
         identity: identity,
       });
 

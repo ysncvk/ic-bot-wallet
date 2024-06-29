@@ -35,7 +35,7 @@ export const WalletProvider = ({ children }) => {
 
             // Ledger canister ile bakiyeyi çek
             const agent = new HttpAgent({
-              host: "https://ic0.app",
+              host: "https://icp-api.io",
             });
 
             const ledger = LedgerCanister.create({

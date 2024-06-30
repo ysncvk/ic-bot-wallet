@@ -5,8 +5,7 @@ import { useNavigate } from "react-router-dom";
 import WebApp from "@twa-dev/sdk";
 import { useWallet } from "../components/WalletContext.jsx";
 import { useSnackbar } from "../components/snackbar";
-
-import { Icon } from "@iconify/react";
+import SvgColor from "../components/svg-color";
 
 const Receive = () => {
   const { wallet } = useWallet();
@@ -82,7 +81,7 @@ const Receive = () => {
           {wallet[0].accountId}
         </Typography>
         <IconButton onClick={copyToClipboard}>
-          <Icon icon="heroicons-solid:clipboard-copy" color="#05A8DD" />
+          <SvgColor src="/icons/copy.svg" color="#05A8DD" />
         </IconButton>
       </Box>
     </Container>

@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import { Icon } from "@iconify/react";
 
 import { StyledIcon, StyledNotistack } from "./styles";
+import SvgColor from "../svg-color";
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +37,7 @@ export default function SnackbarProvider({ children }: Props) {
         ),
         success: (
           <StyledIcon color="success">
-            <Icon icon="eva:checkmark-circle-2-fill" width={24} />
+            <SvgColor src="/icons/check.svg" />
           </StyledIcon>
         ),
         warning: (
@@ -46,7 +47,7 @@ export default function SnackbarProvider({ children }: Props) {
         ),
         error: (
           <StyledIcon color="error">
-            <Icon icon="solar:danger-bold" width={24} />
+            <SvgColor src="/icons/danger.svg" />
           </StyledIcon>
         ),
       }}
@@ -64,7 +65,7 @@ export default function SnackbarProvider({ children }: Props) {
           onClick={() => closeSnackbar(snackbarId)}
           sx={{ p: 0.5 }}
         >
-          <Icon width={16} icon="mingcute:close-line" />
+          <SvgColor src="/icons/close.svg" width={16} height={16} />
         </IconButton>
       )}
     >

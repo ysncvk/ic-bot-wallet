@@ -6,6 +6,7 @@ import CreateWallet from "./pages/CreateWallet";
 import Send from "./pages/Send";
 import Receive from "./pages/Receive";
 import Wallet from "./pages/Wallet";
+import History from "./pages/History";
 import { useAuth } from "./components/AuthContext";
 import { useWallet } from "./components/WalletContext";
 import LoadingScreen from "./components/LoadingScreen";
@@ -43,6 +44,7 @@ const AppContent = () => {
         <Route path="/send" element={<Send />} />
         <Route path="/receive" element={<Receive />} />
         <Route path="/wallet" element={<Wallet />} />
+        <Route path="/history" element={<History />} />
       </Routes>
     </Container>
   );

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "../components/snackbar";
 import { useAuth } from "../components/AuthContext";
+import { encrypt } from "../utils/cryptoUtils";
 
 const CreateWallet = () => {
   const { telegramId, userName, setIsUser } = useAuth();
@@ -29,15 +30,30 @@ const CreateWallet = () => {
         String.fromCharCode(...new Uint8Array(privateKey))
       );
       const principal = identity.getPrincipal();
-
       const accountIdentifier = AccountIdentifier.fromPrincipal({ principal });
       const accountId = accountIdentifier.toHex();
+
+      // Salt oluştur
+      const saltArray = new Uint8Array(16);
+      window.crypto.getRandomValues(saltArray);
+      const salt = btoa(String.fromCharCode(...saltArray));
+
+      // Şifreli private key
+      const encryptedPrivateKey = encrypt(
+        privateKeyBase64,
+        telegramId.toString(),
+        salt
+      );
+      console.log("private key:", privateKeyBase64);
+      console.log(encryptedPrivateKey);
 
       const newWallet = {
         principalId: principal,
         accountId: accountId,
         publicKey: publicKeyBase64,
-        privateKey: privateKeyBase64,
+        privateKey: encryptedPrivateKey,
+        salt: salt,
+        tokens: ["ICP"],
       };
 
       const result = await icp_wallet_bot_backend.createUser(

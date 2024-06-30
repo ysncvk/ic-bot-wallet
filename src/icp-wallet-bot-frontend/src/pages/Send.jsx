@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Button,
   Container,
   TextField,
   Typography,
@@ -11,7 +10,7 @@ import {
 } from "@mui/material";
 import WebApp from "@twa-dev/sdk";
 import { useNavigate } from "react-router-dom";
-import { Icon } from "@iconify/react";
+import { decrypt } from "../utils/cryptoUtils";
 import { useWallet } from "../components/WalletContext.jsx";
 import { HttpAgent } from "@dfinity/agent";
 import { AccountIdentifier, LedgerCanister } from "@dfinity/ledger-icp";
@@ -19,6 +18,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "../components/snackbar";
 import { Ed25519KeyIdentity } from "@dfinity/identity/lib/cjs/identity/ed25519";
 import { Buffer } from "buffer";
+import SvgColor from "../components/svg-color";
+import { useAuth } from "../components/AuthContext.jsx";
 
 if (!window.Buffer) {
   window.Buffer = Buffer;
@@ -30,6 +31,7 @@ const Send = () => {
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { wallet, balance } = useWallet();
+  const { telegramId } = useAuth();
   const navigate = useNavigate();
   const LedgerCanisterId = "ryjl3-tyaaa-aaaaa-aaaba-cai";
 
@@ -39,18 +41,21 @@ const Send = () => {
       return;
     }
     const transferAmountE8s2 = BigInt(Math.round(amount * 100_000_000)); // Convert ICP to e8s format
-    if (balance <= transferAmountE8s2) {
-      enqueueSnackbar("Insufficent balance...", {
-        variant: "error",
-      });
-      return;
-    }
+
     setLoading(true);
     try {
       // Create an HttpAgent with the user's identity
-      const privateKey = wallet[0].privateKey;
-      const privateKeyUint8Array = Uint8Array.from(atob(privateKey), (c) =>
-        c.charCodeAt(0)
+      const encryptedPrivateKey = wallet[0].privateKey;
+      const salt = wallet[0].salt;
+      const privateKeyBase64 = decrypt(
+        encryptedPrivateKey,
+        telegramId.toString(),
+        salt
+      ); // Şifre çözme işlemi
+      console.log("decrypted private key:", privateKeyBase64[0]);
+      const privateKeyUint8Array = Uint8Array.from(
+        atob(privateKeyBase64),
+        (c) => c.charCodeAt(0)
       );
       const identity = Ed25519KeyIdentity.fromSecretKey(privateKeyUint8Array);
 
@@ -68,18 +73,17 @@ const Send = () => {
 
       const recipientAccountIdBuffer = AccountIdentifier.fromHex(accountId);
 
-      console.log("transferAmountE8s", transferAmountE8s);
       console.log("BigInt(10000)", BigInt(100000));
       const result = await ledger.transfer({
         to: recipientAccountIdBuffer,
         amount: transferAmountE8s,
         fee: BigInt(100000),
-        memo: BigInt(0),
+        memo: BigInt(1234),
       });
 
       console.log("Transfer result:", result);
       // Update balance if transfer is successful
-      if (result.Ok !== undefined) {
+      if (result !== undefined) {
         enqueueSnackbar("Transfer successful...", { variant: "success" });
         setLoading(false);
       } else {
@@ -133,8 +137,8 @@ const Send = () => {
   return (
     <Container>
       <Stack alignItems="center">
-        <Icon
-          icon="bitcoin-icons:send-filled"
+        <SvgColor
+          src="/icons/send.svg"
           width={50}
           height={50}
           color="#05A8DD"
@@ -155,12 +159,7 @@ const Send = () => {
           endAdornment: (
             <InputAdornment position="end">
               <IconButton onClick={handleScanQRCode}>
-                <Icon
-                  icon="mdi:qrcode-scan"
-                  width={24}
-                  height={24}
-                  color="#05A8DD"
-                />
+                <SvgColor src="/icons/scan.svg" color="#05A8DD" />
               </IconButton>
             </InputAdornment>
           ),

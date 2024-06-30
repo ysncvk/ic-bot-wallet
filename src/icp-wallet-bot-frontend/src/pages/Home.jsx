@@ -10,14 +10,13 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "../components/WalletContext.jsx";
 import WebApp from "@twa-dev/sdk";
-import { Icon } from "@iconify/react";
 import RotatingImage from "../components/RotateImage.jsx";
 import LoadingScreen from "../components/LoadingScreen.jsx";
+import SvgColor from "../components/svg-color";
 
 const Home = () => {
-  const { wallet, loading, balance } = useWallet();
+  const { wallet, loading, balance, fetchWallet } = useWallet();
   const navigate = useNavigate();
-  console.log("wallet:", wallet);
 
   useEffect(() => {
     WebApp.BackButton.hide();
@@ -29,11 +28,35 @@ const Home = () => {
 
   return (
     <Container>
-      <Box>
-        <IconButton onClick={() => navigate("/wallet")}>
-          <Icon icon="mdi:wallet" width={40} height={40} color="#05A8DD" />
+      <Stack direction="row" justifyContent="space-between">
+        <Stack direction="row">
+          <IconButton onClick={() => navigate("/wallet")}>
+            <SvgColor
+              src="/icons/wallet.svg"
+              width={35}
+              height={35}
+              color="#05A8DD"
+            />
+          </IconButton>
+
+          <IconButton onClick={() => navigate("/history")}>
+            <SvgColor
+              src="/icons/history.svg"
+              width={35}
+              height={35}
+              color="#05A8DD"
+            />
+          </IconButton>
+        </Stack>
+        <IconButton onClick={fetchWallet}>
+          <SvgColor
+            src="/icons/refresh.svg"
+            width={35}
+            height={35}
+            color="#05A8DD"
+          />
         </IconButton>
-      </Box>
+      </Stack>
       <RotatingImage />
       <Typography variant="body1" paddingBottom={1}>
         Your Balance:{" "}
@@ -64,7 +87,7 @@ const Home = () => {
         <Button
           variant="contained"
           fullWidth
-          startIcon={<Icon icon="bitcoin-icons:send-filled" />}
+          startIcon={<SvgColor src="/icons/send.svg" />}
           onClick={() => navigate("/send")}
         >
           Transfer
@@ -72,7 +95,11 @@ const Home = () => {
         <Button
           variant="contained"
           fullWidth
-          startIcon={<Icon icon="bitcoin-icons:receive-filled" />}
+          startIcon={
+            <>
+              <SvgColor src="/icons/receive.svg" />
+            </>
+          }
           onClick={() => navigate("/receive")}
         >
           Receive

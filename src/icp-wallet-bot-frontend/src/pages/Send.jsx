@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Button,
   Box,
   Container,
   TextField,
@@ -20,6 +21,7 @@ import { Ed25519KeyIdentity } from "@dfinity/identity/lib/cjs/identity/ed25519";
 import { Buffer } from "buffer";
 import SvgColor from "../components/svg-color";
 import { useAuth } from "../components/AuthContext.jsx";
+import { getBalance } from "../utils/getBalance.js";
 
 if (!window.Buffer) {
   window.Buffer = Buffer;
@@ -29,18 +31,71 @@ const Send = () => {
   const [accountId, setAccountId] = useState("");
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({ accountId: "", amount: "" });
+  const [isSent, setIsSent] = useState(false);
+  const [block, setBlock] = useState("");
   const { enqueueSnackbar } = useSnackbar();
-  const { wallet, balance } = useWallet();
+  const { wallet, balance, setBalance } = useWallet();
   const { telegramId } = useAuth();
   const navigate = useNavigate();
   const LedgerCanisterId = "ryjl3-tyaaa-aaaaa-aaaba-cai";
 
+  const validate = () => {
+    let isValid = true;
+    const errors = {};
+
+    if (!accountId) {
+      errors.accountId = "Account ID is required.";
+      isValid = false;
+    } else if (!/^[a-f0-9]{64}$/.test(accountId)) {
+      errors.accountId = "Invalid Account ID format.";
+      isValid = false;
+    }
+
+    if (!amount) {
+      errors.amount = "Amount is required.";
+      isValid = false;
+    } else if (isNaN(amount) || amount <= 0) {
+      errors.amount = "Invalid amount.";
+      isValid = false;
+    }
+
+    setErrors(errors);
+    return isValid;
+  };
+
+  const handleMaxClick = () => {
+    if (balance - 0.0001 <= 0) {
+      setAmount(0);
+      enqueueSnackbar("Insufficient Balance...", {
+        variant: "error",
+      });
+    } else {
+      setAmount((balance - 0.0001).toFixed(7));
+    } // Adjust the precision if necessary
+  };
+
+  const handleNewTransfer = () => {
+    setAmount("");
+    setAccountId("");
+    setIsSent(false);
+  };
+
   const handleTransfer = async () => {
+    if (!validate()) {
+      return;
+    }
     if (!wallet || !wallet[0].accountId) {
       console.error("User account ID is missing");
       return;
     }
-    const transferAmountE8s2 = BigInt(Math.round(amount * 100_000_000)); // Convert ICP to e8s format
+
+    if (balance - 0.0001 < amount) {
+      enqueueSnackbar("Insufficient Balance...", {
+        variant: "error",
+      });
+      return;
+    }
 
     setLoading(true);
     try {
@@ -52,7 +107,7 @@ const Send = () => {
         telegramId.toString(),
         salt
       ); // Şifre çözme işlemi
-      console.log("decrypted private key:", privateKeyBase64[0]);
+
       const privateKeyUint8Array = Uint8Array.from(
         atob(privateKeyBase64),
         (c) => c.charCodeAt(0)
@@ -73,19 +128,16 @@ const Send = () => {
 
       const recipientAccountIdBuffer = AccountIdentifier.fromHex(accountId);
 
-      console.log("BigInt(10000)", BigInt(100000));
       const result = await ledger.transfer({
         to: recipientAccountIdBuffer,
         amount: transferAmountE8s,
-        fee: BigInt(100000),
-        memo: BigInt(1234),
       });
 
-      console.log("Transfer result:", result);
-      // Update balance if transfer is successful
       if (result !== undefined) {
         enqueueSnackbar("Transfer successful...", { variant: "success" });
         setLoading(false);
+        setBlock(Number(result).toString());
+        setIsSent(true);
       } else {
         enqueueSnackbar("There has been a problem please try again later...", {
           variant: "error",
@@ -104,6 +156,7 @@ const Send = () => {
       navigate(-1);
     };
 
+    console.log(navigate);
     WebApp.BackButton.onClick(handleBackButton);
 
     // Clean up the event listener
@@ -152,6 +205,8 @@ const Send = () => {
         label="Account ID"
         value={accountId}
         onChange={(e) => setAccountId(e.target.value)}
+        error={!!errors.accountId}
+        helperText={errors.accountId}
         fullWidth
         margin="normal"
         InputLabelProps={{ shrink: true }}
@@ -170,20 +225,68 @@ const Send = () => {
         type="number"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
+        error={!!errors.amount}
+        helperText={errors.amount}
         fullWidth
         margin="normal"
         InputLabelProps={{ shrink: true }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={handleMaxClick}>
+                <Typography variant="body2" color="orange">
+                  Max
+                </Typography>
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
-      <Box paddingTop={3}>
-        <LoadingButton
-          variant="contained"
-          onClick={handleTransfer}
-          fullWidth
-          loading={loading}
+      {isSent ? (
+        <Box
+          marginTop={3}
+          borderRadius={2}
+          border="solid"
+          borderColor="aliceblue"
+          padding={1}
         >
-          Transfer ICP
-        </LoadingButton>
-      </Box>
+          <Typography variant="body1" color="success">
+            Transfer completed succesfully...
+          </Typography>
+          <Stack direction="column" spacing={2} marginTop={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleNewTransfer}
+              fullWidth
+              style={{ textTransform: "none" }}
+            >
+              Make new Transfer
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              href={`https://dashboard.internetcomputer.org/transaction/${block}`}
+              target="_blank"
+              fullWidth
+              style={{ textTransform: "none" }}
+            >
+              View on ICP Dashboard
+            </Button>
+          </Stack>
+        </Box>
+      ) : (
+        <Box paddingTop={3}>
+          <LoadingButton
+            variant="contained"
+            onClick={handleTransfer}
+            fullWidth
+            loading={loading}
+          >
+            Transfer ICP
+          </LoadingButton>
+        </Box>
+      )}
     </Container>
   );
 };

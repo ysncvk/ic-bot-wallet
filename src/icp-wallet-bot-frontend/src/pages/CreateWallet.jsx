@@ -44,8 +44,6 @@ const CreateWallet = () => {
         telegramId.toString(),
         salt
       );
-      console.log("private key:", privateKeyBase64);
-      console.log(encryptedPrivateKey);
 
       const newWallet = {
         principalId: principal,

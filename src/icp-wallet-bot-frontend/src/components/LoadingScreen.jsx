@@ -1,18 +1,17 @@
-import { Box, CircularProgress, Container } from "@mui/material";
-import React from "react";
+import { Box, CircularProgress } from "@mui/material";
 
 export default function LoadingScreen() {
   return (
-    <Container
-      maxWidth="sm" // Adjust as needed for desired screen size
+    <Box
       sx={{
-        display: "flex", // Enable flexbox for centering
-        justifyContent: "center", // Center horizontally
-        alignItems: "center", // Center vertically
-        height: "100vh", // Fill viewport height for full-screen effect
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100vw", // Ekran genişliği kadar
+        height: "100vh", // Ekran yüksekliği kadar
       }}
     >
       <CircularProgress color="primary" />
-    </Container>
+    </Box>
   );
 }

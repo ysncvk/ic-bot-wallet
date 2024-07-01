@@ -27,7 +27,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const result = await icp_wallet_bot_backend.checkUser(telegramId);
       setIsUser(result);
-      console.log("result:", result);
     } catch (error) {
       console.error("Error checking user:", error);
     } finally {

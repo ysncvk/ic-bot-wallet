@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { Container, Typography, Box, Stack, IconButton } from "@mui/material";
+import { Container, Typography, Stack } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import Paper from "@mui/material/Paper";
 import { useWallet } from "../components/WalletContext.jsx";
 import SvgColor from "../components/svg-color";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import WebApp from "@twa-dev/sdk";
-import {
-  AccountIdentifier,
-  LedgerCanister,
-  IndexCanister,
-} from "@dfinity/ledger-icp";
+import { IndexCanister } from "@dfinity/ledger-icp";
 import { Buffer } from "buffer";
 import { HttpAgent } from "@dfinity/agent";
+import LoadingScreen from "../components/LoadingScreen.jsx";
+import HistoryTableRow from "../components/HistoryItem.jsx";
 
 if (!window.Buffer) {
   window.Buffer = Buffer;
@@ -22,6 +24,7 @@ const History = () => {
   const navigate = useNavigate();
   const { wallet } = useWallet();
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const account = wallet[0].accountId;
 
@@ -46,6 +49,7 @@ const History = () => {
   }, [navigate]);
 
   const getTransactions = async () => {
+    setLoading(true);
     const agent = new HttpAgent({
       host: "https://icp-api.io",
     });
@@ -61,7 +65,7 @@ const History = () => {
     });
 
     setData(result.transactions);
-    console.log(data);
+    setLoading(false);
   };
 
   return (
@@ -77,10 +81,17 @@ const History = () => {
           Transaction History
         </Typography>
       </Stack>
-      {data.length === 0 && (
-        <Typography variant="bodt2">No transactions found....</Typography>
+      <Stack direction="column" gap={1}>
+        {loading ? (
+          <LoadingScreen />
+        ) : (
+          data?.map((row) => <HistoryTableRow key={row?.id} row={row} />)
+        )}
+      </Stack>
+
+      {data.length === 0 && !loading && (
+        <Typography variant="body2">No transactions found....</Typography>
       )}
-      <Stack></Stack>
     </Container>
   );
 };

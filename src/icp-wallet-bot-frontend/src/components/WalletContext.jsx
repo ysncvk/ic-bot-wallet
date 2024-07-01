@@ -48,9 +48,8 @@ export const WalletProvider = ({ children }) => {
           const balanceResult = await ledger.accountBalance({
             accountIdentifier: accountIdBuffer,
           });
-          console.log(balanceResult);
 
-          if (Number(balanceResult) === null) {
+          if (Number(balanceResult) === null || Number(balanceResult) === 0) {
             setBalance(0);
           } else {
             const balanceICP = Number(balanceResult) / 100_000_000; // e8s formatından ICP'ye çevirme
@@ -67,7 +66,7 @@ export const WalletProvider = ({ children }) => {
 
   return (
     <WalletContext.Provider
-      value={{ wallet, setWallet, balance, loading, fetchWallet }}
+      value={{ wallet, setWallet, balance, loading, fetchWallet, setBalance }}
     >
       {children}
     </WalletContext.Provider>

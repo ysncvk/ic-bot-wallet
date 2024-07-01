@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Container,
@@ -6,6 +6,7 @@ import {
   Stack,
   Box,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "../components/WalletContext.jsx";
@@ -13,10 +14,20 @@ import WebApp from "@twa-dev/sdk";
 import RotatingImage from "../components/RotateImage.jsx";
 import LoadingScreen from "../components/LoadingScreen.jsx";
 import SvgColor from "../components/svg-color";
+import { getBalance } from "../utils/getBalance.js";
+import { LoadingButton } from "@mui/lab";
 
 const Home = () => {
-  const { wallet, loading, balance, fetchWallet } = useWallet();
+  const { wallet, loading, balance, setBalance } = useWallet();
+  const [loadingBalance, setLoadingBalance] = useState(false);
   const navigate = useNavigate();
+
+  const refreshBalance = async () => {
+    setLoadingBalance(true);
+    const refreshedBalance = await getBalance(wallet[0].accountId);
+    setBalance(refreshedBalance);
+    setLoadingBalance(false);
+  };
 
   useEffect(() => {
     WebApp.BackButton.hide();
@@ -48,18 +59,36 @@ const Home = () => {
             />
           </IconButton>
         </Stack>
-        <IconButton onClick={fetchWallet}>
+        <LoadingButton
+          onClick={refreshBalance}
+          loading={loadingBalance}
+          sx={{
+            minWidth: "auto",
+            padding: 0,
+            border: "none",
+            backgroundColor: "transparent",
+            "&.MuiButton-root": {
+              minWidth: "auto",
+              padding: 0,
+              border: "none",
+              backgroundColor: "transparent",
+            },
+            "&:hover": {
+              backgroundColor: "transparent",
+            },
+          }}
+        >
           <SvgColor
             src="/icons/refresh.svg"
             width={35}
             height={35}
             color="#05A8DD"
           />
-        </IconButton>
+        </LoadingButton>
       </Stack>
       <RotatingImage />
       <Typography variant="body1" paddingBottom={1}>
-        Your Balance:{" "}
+        {loadingBalance ? "Updating Balance... " : "Your Balance:"}
       </Typography>
       <Box
         padding={1}
@@ -68,15 +97,19 @@ const Home = () => {
         border="solid"
         textAlign="center"
       >
-        <Stack
-          direction="row"
-          spacing={1}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Typography variant="h3">{balance.toFixed(2)}</Typography>
-          <Typography variant="body2">ICP</Typography>
-        </Stack>
+        {loadingBalance ? (
+          <CircularProgress color="primary" />
+        ) : (
+          <Stack
+            direction="row"
+            spacing={1}
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Typography variant="h5">{balance.toFixed(7)}</Typography>
+            <Typography variant="body2">ICP</Typography>
+          </Stack>
+        )}
       </Box>
       <Stack
         direction="row"

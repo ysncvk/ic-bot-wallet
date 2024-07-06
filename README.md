@@ -50,6 +50,8 @@ IC Bot Wallet is developed using a robust and modern technology stack to ensure 
 - **Frontend**: Developed using React, Material UI and React Router, also deployed on the Internet Computer (ICP) blockchain, providing a seamless and intuitive user interface.
 - **Telegram Integration**: Utilizes the [twa-dev/sdk](https://github.com/twa-dev/sdk) library for seamless interaction with Telegram.
 
+## You can watch the full version of the introduction video via this link
+
 https://drive.google.com/file/d/1q1x7HW3j39wcGGxjHh7cK7JpnrPe0u3L/view?usp=sharing
 
 ## Installation

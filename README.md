@@ -1,15 +1,29 @@
-# `icp-wallet-bot`
+<p align="center"><img width=12.5% src="https://v2e5r-bqaaa-aaaal-qjgpa-cai.icp0.io/icbot.png"></p>
 
-Welcome to your new `icp-wallet-bot` project and to the Internet Computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
+# ICBot Wallet
+
+## Description
+
+IC Bot Wallet is the first-ever Telegram bot wallet that operates entirely on the Internet Computer (ICP) network. This project is designed to provide a fast and unique digital wallet service to Telegram’s vast user base.
+
+## A Brief Overview of the Internet Computer Protocol
+
+ICP (Internet Computer Protocol) is the core protocol of the Internet Computer, a blockchain network. This protocol is used for developing decentralized applications and operates securely and efficiently on a decentralized network. ICP encompasses a set of protocols and algorithms used to manage smart contracts and decentralized databases. Users on the network can store, process, and share data through ICP. As a result, the Internet Computer provides a more scalable, secure, and open internet experience beyond traditional web services.
+
+You can learn more on [ICP](https://internetcomputer.org/)
+
+## Installation
 
 To get started, you might want to explore the project directory structure and the default configuration file. Working with this project in your development environment will not affect any production deployment or identity tokens.
 
-To learn more before you start working with `icp-wallet-bot`, see the following documentation available online:
+To learn more before you start working with ICBot, see the following documentation available online:
 
 - [Quick Start](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
 - [SDK Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
 - [Motoko Programming Language Guide](https://internetcomputer.org/docs/current/motoko/main/motoko)
 - [Motoko Language Quick Reference](https://internetcomputer.org/docs/current/motoko/main/language-manual)
+
+## Quick Start
 
 If you want to start working on your project right away, you might want to try the following commands:
 

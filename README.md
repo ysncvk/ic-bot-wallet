@@ -36,8 +36,9 @@ You can learn more on [ICP](https://internetcomputer.org/)
 - **Verify the Transaction**: After making an ICP transfer, you can verify the transaction via the link provided on the screen using the ICP Dashboard. Additionally, each transaction listed on the transaction history page can also be verified in the same manner.
 
 
-
+<div align="center">
 https://github.com/ysncvk/ic-bot-wallet/assets/114699744/9e8946e7-4523-48ce-9faa-76382a91a6c3
+</div>
 
 
 

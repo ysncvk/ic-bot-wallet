@@ -10,7 +10,7 @@ IC Bot Wallet is the first-ever Telegram bot wallet that operates entirely on th
 
 [IC Bot Wallet](https://t.me/icp_trade_bot)
 
-Click the link above to access the IC Bot Wallet on Telegram. After accessing the bot create a wallet with one click than experience the seamless and secure way to manage your ICP tokens directly within the Telegram app. The bot provides an intuitive interface and a range of features designed to make ICP transactions effortless.
+Click the link above to access the IC Bot Wallet on Telegram. After accessing the bot, create a wallet with just one click, then experience the seamless and secure way to manage your ICP tokens directly within the Telegram app. The bot provides an intuitive interface and a range of features designed to make ICP transactions effortless.
 
 ## A Brief Overview of the Internet Computer Protocol
 
